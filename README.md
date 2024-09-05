@@ -76,3 +76,12 @@ miniconda，纯净版conda命令软件，不自带库，需自行安装，占用
 比如：打开cmd，输入：
 
 `pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118`
+
+## 3例子
+![image](https://github.com/user-attachments/assets/b2d58d30-408d-4ef9-b698-a0b005c104db)
+
+会将参数配置、模型结果、训练epoch的信息记录到日志中；
+
+![image](https://github.com/user-attachments/assets/6a2e585f-f7f6-4a13-aaaa-1cf05698400b)
+
+会保存每一个epoch的验证集结果（第一个batch的）
