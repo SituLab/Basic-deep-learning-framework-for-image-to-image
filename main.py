@@ -2,7 +2,6 @@
 
 import os
 import cv2
-import sys
 import json
 import torch
 import argparse
@@ -16,13 +15,13 @@ from utils import save_images
 import matplotlib.pyplot as plt
 from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader, random_split
-sys.argv = ['run.py']
 
 os.makedirs('./dataset/input/', exist_ok=True)
 os.makedirs('./dataset/label/', exist_ok=True)
 os.makedirs('./dataset/test/', exist_ok=True)
 os.makedirs('./weights/', exist_ok=True)
 os.makedirs('./results/', exist_ok=True)
+
 
 class LoadDataset(Dataset):
     def __init__(self, image_dir='./dataset/input', label_dir='./dataset/label', transform=None, train_num=None):
@@ -117,14 +116,14 @@ def test(args):
     pass
 
 
-def launch(running_name='demo'):
+def launch():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--running_name', type=str, default=running_name)
-    parser.add_argument('--model_path', type=str, default=f'./weights/{running_name}/best_model.pth')
+    parser.add_argument('--running_name', '-i', type=str, required=True, default='demo1', help="输入文件路径")
+    parser.add_argument('--model_path', type=str, default='./weights/demo1/best_model.pth')
     parser.add_argument('--is_train', type=bool, default=True)
     parser.add_argument('--is_test', type=bool, default=True)
+    
     args = parser.parse_args()
-    args.running_name = running_name
     args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
     args.epochs = 200
     args.batch_size = 8
@@ -140,11 +139,13 @@ def launch(running_name='demo'):
     args.net = UNet().to(args.device)
 
     # 记录每次训练的配置信息
-    with open('log_'+running_name+'.txt', 'w') as f:
+    with open('log_'+args.running_name+'.txt', 'w') as f:
         for key, value in vars(args).items():
             f.write(f"{key}: {value}\n")  # 每个键值对后添加换行符
 
+
     if args.is_train :
+        print(args.running_name)
         train(args)
 
     if args.is_test :
@@ -153,11 +154,4 @@ def launch(running_name='demo'):
     return args
 
 if __name__ == '__main__':
-    args = launch('demo')
-    # dataset = LoadDataset(transform=args.transform)
-    # input, label = dataset[1]
-    # input = input.squeeze()
-    # label = label.squeeze()
-    # plt.subplot(121), plt.imshow(input)
-    # plt.subplot(122), plt.imshow(label)
-    
+    launch()    
