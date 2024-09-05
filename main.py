@@ -117,7 +117,7 @@ def test(args):
 
 def launch():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--running_name', '-i', type=str, required=True, default='demo1', help="输入文件路径")
+    parser.add_argument('--running_name', '-i', type=str, required=True, default='demo', help="输入文件路径")
     parser.add_argument('--model_path', type=str, default='./weights/demo1/best_model.pth')
     parser.add_argument('--is_train', type=bool, default=True)
     parser.add_argument('--is_test', type=bool, default=True)
