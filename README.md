@@ -23,26 +23,46 @@
 `git clone https://github.com/SituLab/Basic-deep-learning-framework-for-image-to-image.git`
 
 ### 1_2深度学习开发
-配置环境可以参考下一章节，若已安装，可跳过直接进行下面的开发。
 
-注：该项目的代码经过优化，编写不少便于分析和调试的trick。
+（1）训练image-to-image任务
 
-（1）训练自己的image-to-image任务
+`  python main.py --running_name demo  `
 
-将网络的输入数据放在dataset文件夹的input文件夹下；将网络的标签数据放在dataset文件夹的label文件夹下；
+（2）测试image-to-image任务
 
-打开cmd，切换到安装好的环境(conda )，运行`python main.py running_name`即可进行训练, 其中running_name是自定义一个此次运行的名称，代码会相应地按照该名称创建文件夹保存结果。
+`  python main.py --running_name demo  --is_training 0 --is_testing 1`
 
-比如运行`python main.py demo`，会创建以demo为名称的文件夹
+（3）测试单张图像
 
-或者使用vscode或pycharm打开项目，使用编译器进行运行。
+`  python main.py --is_training 0 --img_path dataset/demo.png`
 
-（2）查看训练过程
+（4）数据集设置
 
-log_demo.txt文档保存了此次训练所使用的配置信息和训练过程信息；
+`dataset/input/`存放输入的数据集；
+`dataset/label`存放标签的数据集；
+`dataset/test_input`存放测试输入的数据集；
 
+（5）参数解释
 
+`--running_name`：为每次训练提供一个运行名称，代码会创建相应名称的文件夹保存结果和日志。
 
+`--is_train`：设置是否训练，默认训练；
+
+`--is_test`：设置是否测试，默认测试；
+
+`--img_path`：指定一张测试图像的路径；
+
+（6）查看训练过程
+
+`i`：log_demo.txt保存了此次训练所使用的配置信息和训练过程信息；
+
+`ii`：weights/demo/best_model.pth保存了验证集loss最小的模型；
+
+`iii`：results/demo/eval/保存了每一步训练时一个batch的推理结果；
+
+（7）其他
+
+在快速训练上，可以使用上述命令行的方法，如果需要细致开发，可以使用vscode或pycharm，使用编译器运行代码。
 
 
 ## 2环境配置
@@ -54,6 +74,7 @@ miniconda，纯净版conda命令软件，不自带库，需自行安装，占用
 ### 2-2安装pytorch
 访问torch官网，直接通过指令进行安装。网址：https://pytorch.org/get-started/locally/
 ![image](https://github.com/user-attachments/assets/37652e77-f305-4814-88cc-d506ab77e1db)
+
 比如：打开cmd，输入：
 
 `pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118`
