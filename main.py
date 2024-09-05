@@ -2,7 +2,6 @@
 
 import os
 import cv2
-import json
 import torch
 import argparse
 import numpy as np
@@ -128,7 +127,6 @@ def launch():
     args.epochs = 200
     args.batch_size = 8
     args.lr = 3e-4
-    args.internal = 100
     # 数据预处理，包括尺寸调整和归一化
     args.transform = transforms.Compose([
         transforms.ToTensor(),
