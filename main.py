@@ -111,8 +111,39 @@ def train(args):
     pass
 
 def test(args):
-    print('testing')
-    pass
+    print('testing begin:')
+    save_folder = os.path.join('./results/', args.running_name, 'test')
+    os.makedirs(save_folder, exist_ok=True)
+    
+    # 加载数据，注：dl是文件名称列表，占用内存少；
+    # transform = transforms.Compose([transforms.ToTensor()])
+    transform = transforms.Compose([
+        # ResizeToMultipleOf32(),
+        transforms.ToTensor(),
+        transforms.RandomCrop(512, 512, padding_mode='symmetric'),
+        # transforms.Resize((512, 512)),
+    ])
+    dataset = LoadDataset('./dataset/test_input/','./dataset/test_label', transform=transform)
+    test_dl = DataLoader(dataset, batch_size=1)
+
+    # 配置网络
+    args.model_path = f'./weights/{args.running_name}/best_{args.running_name}.pth'
+    net = args.net
+    net.load_state_dict(torch.load(args.model_path))
+    net.eval()
+
+    # 开始测试
+    for idx, (input, label) in tqdm(enumerate(test_dl), desc='testing:'):
+        output = net(input.to(args.device))
+        res = output.squeeze().permute(1, 2, 0).detach().cpu().numpy()
+        save_path = os.path.join(save_folder, dataset.image_files[idx])
+        input_path = os.path.join(save_folder, dataset.image_files[idx][:-4]+'_input.jpg')
+        label_path = os.path.join(save_folder, dataset.image_files[idx][:-4]+'_label.jpg')
+        cv2.imwrite(save_path, res*255)
+        input = input.squeeze().permute(1, 2, 0).detach().cpu().numpy()
+        cv2.imwrite(input_path, input*255)
+        label = label.squeeze().permute(1, 2, 0).detach().cpu().numpy()
+        cv2.imwrite(label_path, label*255)
 
 
 def launch():
